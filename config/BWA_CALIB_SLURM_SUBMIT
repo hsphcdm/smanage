@@ -1,0 +1,16 @@
+JOB_NAME=PRE_BWA_CALIB
+JOB_IDS=
+JOB_START_DATE=
+
+RESERVE=30
+MAX_ID=30
+#ARRAY=
+PARTITION=shared
+#RESERVATION=esurface
+
+BATCH_DIR=/n/seage_lab/esurface/BWA_Calibration/simulations/Test_Submittion
+BATCH_PREFIX=Bots_ART_v4_batch_
+INFILES=/n/seage_lab/esurface/BWA_Calibration/simulations/INFILES
+
+SBATCH_SCRIPT=/n/home05/esurface/job_submittion/run_trans_model_batches-4.0.sh
+#RESULTS_DIR=

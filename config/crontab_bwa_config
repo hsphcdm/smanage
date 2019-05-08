@@ -1,0 +1,3 @@
+CONFIG=/n/seage_lab/esurface/BWA_Calibration/simulations/ART_COMPARE/MULTI_ART/BWA_10K_CONFIG
+*/30 * * * * ~/job_submittion/slurm_mgr.sh --submit --config $CONFIG
+10 */4 * * * ~/job_submittion/slurm_mgr.sh --config $CONFIG
