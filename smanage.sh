@@ -524,9 +524,9 @@ handle_pending() {
             # Get how many are pending
             leftjobstep=( $(echo "$jobstep" | tr -d '[[:alpha:]]' | cut -d '-' -f 1) )
             rightjobstep=( $(echo "$jobstep" | tr -d '[[:alpha:]]' | cut -d '-' -f 2) )
-            num_pending=$((num_pending + rightjobstep - leftjobstep))
+            num_pending=$((num_pending + 1 + rightjobstep - leftjobstep))
         else
-            num_pending=$((num_ending + 1))
+            num_pending=$((num_pending + 1))
         fi
 	done
     echo "${num_pending} PENDING jobs"
@@ -819,9 +819,10 @@ submit_mode() {
         done
 
         if [[ -z $BATCH_NAME ]]; then
-            echo "No batch name provided"
-            usage "submit"
-            return 1
+            # use the directory as the batch name
+            BATCH_NAME=$(basename $PWD)
+            echo "No batch name provided using ${BATCH_NAME}"
+            BATCH_NAME_ARG="--job-name=$BATCH_NAME"
         fi
     else
         BATCH_NAME_ARG="--job-name=$BATCH_NAME"
