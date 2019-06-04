@@ -65,7 +65,7 @@ In the script, define a function called '_ext_handle_completed' that will be pas
 usage_config_mode() {
 echo 'usage: smanage config 
   [--append <--config <CONFIG> [--jobids=<job_id>[,job_id,...]] ]
-  [--create <--batch_name <name>> [--jobids=<job_id>[,job_id,...]] ]
+  [--create <--batch_name <name>> [--sbatch <SBATCH_ARGS>] 
   [--reset <--config <CONFIG>]
 Create, reset or append job ids to a config file
 '
@@ -386,7 +386,25 @@ create_config() {
                 return 1
             fi
             BATCH_NAME=$1
-            ;;
+        ;;
+        --max_id) shift
+            if [[ -z $1 || ! $1 =~ [[:digit:]] ]]; then
+                usage "submit"
+                return 1
+            fi
+            MAX_ID=$1
+        ;;
+        --reserve) shift
+            if [[ -z $1 || ! $1 =~ [[:digit:]] ]]; then
+                usage "submit"
+                return 1
+            fi
+            RESERVE=$1
+        ;;
+        --sbatch) shift
+            SBATCH_PARAMS=$@
+            break
+        ;;
         *) usage "config"
             return 1
         ;;
@@ -408,6 +426,10 @@ cat << EOT > ${BATCH_NAME}_CONFIG
 BATCH_NAME=$BATCH_NAME
 BATCH_DATE=$BATCH_DATE
 JOB_IDS=$JOB_IDS
+
+MAX_ID=$MAX_ID
+RESERVE=$RESERVE
+SBATCH_ARGS=$SBATCH_PARAMS
 
 EOT
 
@@ -623,7 +645,7 @@ report_mode() {
 submit_batch() {
 
     echo "Submitting jobs: $SBATCH $ARRAY_ARG $BATCH_NAME_ARG ${SBATCH_ARGS[@]}"
-
+    
     if [[ -z $DEBUG ]]; then
         OUTPUT=$($SBATCH $ARRAY_ARG $BATCH_NAME_ARG ${SBATCH_ARGS[@]})
     fi
